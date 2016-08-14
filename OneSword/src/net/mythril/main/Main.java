@@ -11,14 +11,19 @@ import org.newdawn.slick.opengl.Texture;
 import org.newdawn.slick.opengl.TextureLoader;
 import org.newdawn.slick.util.ResourceLoader;
 
+import net.mythril.enemy.Enemy1;
 import net.mythril.player.Player;
+import net.mythril.player.PlayerInput;
 
 public class Main 
 {
 	final static int WIDTH = 800;
 	final static int HEIGHT = 600;
 	
-	Player p = new Player(100,100,64,64);
+	Player p = new Player(100,300,64,64);
+	Enemy1 e = new Enemy1(300,300,64,64);
+	
+	PlayerInput pi = new PlayerInput();
 	
 	public void start()
 	{
@@ -66,10 +71,10 @@ public class Main
 		glMatrixMode(GL_PROJECTION);
 		glLoadIdentity();
 		glOrtho(0, WIDTH, HEIGHT, 0, 1, -1);
-		glMatrixMode(GL_MODELVIEW);
 		
 		try {
 			p.setTex("rsc/spr/placeholder.png");
+			e.setTex("rsc/spr/dirt_top.png");
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -77,6 +82,7 @@ public class Main
 	
 	public void render()
 	{
+		pi.pollInput(p);
 		p.getTex().bind();
 		
 		glBegin(GL_QUADS);
@@ -88,6 +94,20 @@ public class Main
 			glVertex2f(p.getX()+p.getTex().getTextureWidth(),p.getY()+p.getTex().getTextureHeight());
 			glTexCoord2f(0,1);
 			glVertex2f(p.getX(),p.getY()+p.getTex().getImageHeight());
+			
+			p.getTex().release();
+			e.getTex().bind();
+			
+			glTexCoord2f(0,0);
+			glVertex2f(e.getX(),e.getY());
+			glTexCoord2f(1,0);
+			glVertex2f(e.getX()+e.getTex().getImageWidth(),e.getY());
+			glTexCoord2f(1,1);
+			glVertex2f(e.getX()+e.getTex().getTextureWidth(),e.getY()+e.getTex().getTextureHeight());
+			glTexCoord2f(0,1);
+			glVertex2f(e.getX(),e.getY()+e.getTex().getImageHeight());
+			
+			e.getTex().release();
 		glEnd();
 	}
 	
