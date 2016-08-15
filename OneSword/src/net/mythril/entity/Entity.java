@@ -1,5 +1,6 @@
 package net.mythril.entity;
 
+import static org.lwjgl.opengl.GL11.*;
 import java.io.IOException;
 
 import org.newdawn.slick.opengl.Texture;
@@ -61,5 +62,21 @@ public class Entity
 	public void setTex(String dir) throws IOException {
 		genericTex = TextureLoader.getTexture("PNG", ResourceLoader.getResourceAsStream(dir));
 		displayGenTex = false;
+	}
+	
+	public void render()
+	{
+		getTex().bind();
+		
+		glBegin(GL_QUADS);
+			glTexCoord2f(0,0);
+			glVertex2f(getX(),getY());
+			glTexCoord2f(1,0);
+			glVertex2f(getX()+getTex().getImageWidth(),getY());
+			glTexCoord2f(1,1);
+			glVertex2f(getX()+getTex().getTextureWidth(),getY()+getTex().getTextureHeight());
+			glTexCoord2f(0,1);
+			glVertex2f(getX(),getY()+getTex().getImageHeight());
+		glEnd();
 	}
 }

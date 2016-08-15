@@ -1,5 +1,6 @@
 package net.mythril.main;
 
+import static org.lwjgl.opengl.GL30.*;
 import static org.lwjgl.opengl.GL11.*;
 
 import java.io.IOException;
@@ -7,9 +8,6 @@ import java.io.IOException;
 import org.lwjgl.LWJGLException;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
-import org.newdawn.slick.opengl.Texture;
-import org.newdawn.slick.opengl.TextureLoader;
-import org.newdawn.slick.util.ResourceLoader;
 
 import net.mythril.enemy.Enemy1;
 import net.mythril.player.Player;
@@ -31,15 +29,13 @@ public class Main
 		
 		while(true)
 		{
-			glClear(GL_COLOR_BUFFER_BIT);
-			
 			render();
-			
-			Display.update();
-			Display.sync(60);
 			
 			if(Display.isCloseRequested())
 			{
+				e.getTex().release();
+				p.getTex().release();
+				
 				Display.destroy();
 				System.exit(0);
 			}
@@ -66,11 +62,11 @@ public class Main
 			glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 			
 			glViewport(0,0,WIDTH,HEIGHT);
-		glMatrixMode(GL_MODELVIEW);
 		
 		glMatrixMode(GL_PROJECTION);
 		glLoadIdentity();
 		glOrtho(0, WIDTH, HEIGHT, 0, 1, -1);
+		glMatrixMode(GL_MODELVIEW);
 		
 		try {
 			p.setTex("rsc/spr/placeholder.png");
@@ -78,37 +74,26 @@ public class Main
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		
+		System.out.println("OpenGL version: " + glGetString(GL_VERSION));
 	}
 	
 	public void render()
 	{
-		pi.pollInput(p);
-		p.getTex().bind();
+		glClear(GL_COLOR_BUFFER_BIT);
 		
-		glBegin(GL_QUADS);
-			glTexCoord2f(0,0);
-			glVertex2f(p.getX(),p.getY());
-			glTexCoord2f(1,0);
-			glVertex2f(p.getX()+p.getTex().getImageWidth(),p.getY());
-			glTexCoord2f(1,1);
-			glVertex2f(p.getX()+p.getTex().getTextureWidth(),p.getY()+p.getTex().getTextureHeight());
-			glTexCoord2f(0,1);
-			glVertex2f(p.getX(),p.getY()+p.getTex().getImageHeight());
+		pi.pollInput(p);
+		
+		p.render();
+		
+		e.render();
+		
+		
 			
-			p.getTex().release();
-			e.getTex().bind();
-			
-			glTexCoord2f(0,0);
-			glVertex2f(e.getX(),e.getY());
-			glTexCoord2f(1,0);
-			glVertex2f(e.getX()+e.getTex().getImageWidth(),e.getY());
-			glTexCoord2f(1,1);
-			glVertex2f(e.getX()+e.getTex().getTextureWidth(),e.getY()+e.getTex().getTextureHeight());
-			glTexCoord2f(0,1);
-			glVertex2f(e.getX(),e.getY()+e.getTex().getImageHeight());
-			
-			e.getTex().release();
-		glEnd();
+		glBindTexture(GL_TEXTURE_2D, 0);
+		
+		Display.sync(60);
+		Display.update();
 	}
 	
 	public static void main(String[] args)
