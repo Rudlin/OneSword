@@ -9,29 +9,29 @@ import org.newdawn.slick.util.ResourceLoader;
 
 public class Entity 
 {
-	int x,y,width,height;
+	float x,y,width,height;
 	
 	protected Texture genericTex;
 	
 	boolean displayGenTex = true;
 	
-	public int getX() {
+	public float getX() {
 		return x;
 	}
 
-	public void setX(int x) {
+	public void setX(float x) {
 		this.x = x;
 	}
 
-	public int getY() {
+	public float getY() {
 		return y;
 	}
 
-	public void setY(int y) {
+	public void setY(float y) {
 		this.y = y;
 	}
 
-	public int getWidth() {
+	public float getWidth() {
 		return width;
 	}
 
@@ -39,7 +39,7 @@ public class Entity
 		this.width = width;
 	}
 
-	public int getHeight() {
+	public float getHeight() {
 		return height;
 	}
 
@@ -78,5 +78,20 @@ public class Entity
 			glTexCoord2f(0,1);
 			glVertex2f(getX(),getY()+getTex().getImageHeight());
 		glEnd();
+	}
+	
+	public void collide(Entity e)
+	{
+		//collision of this entity on this entity's left side
+		if(getX() <= e.getX() + e.getWidth() && getY() >= e.getY() && getY() + getWidth() <= e.getY() + e.getWidth() && getX() > e.getX())
+		{
+			setX(e.getX() + e.getWidth());
+		}
+		
+		//collision of this entity on this entity's right side
+		else if(getX() + getWidth() >= e.getX() && getY() >= e.getY() && getY() + getWidth() <= e.getY() + e.getWidth() && getX() < e.getX() + getWidth())
+		{
+			setX(e.getX() - e.getWidth());
+		}
 	}
 }

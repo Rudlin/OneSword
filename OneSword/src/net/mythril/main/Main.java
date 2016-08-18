@@ -9,19 +9,18 @@ import org.lwjgl.LWJGLException;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
 
-import net.mythril.enemy.Enemy1;
+import net.mythril.entity.Entity;
+import net.mythril.entity.EntityLoader;
 import net.mythril.player.Player;
-import net.mythril.player.PlayerInput;
 
 public class Main 
 {
 	final static int WIDTH = 800;
 	final static int HEIGHT = 600;
 	
-	Player p = new Player(100,300,64,64);
-	Enemy1 e = new Enemy1(300,300,64,64);
-	
-	PlayerInput pi = new PlayerInput();
+	Player p = new Player(100,236,64,64);
+	EntityLoader eLoader = new EntityLoader();
+	Entity ent;
 	
 	public void start()
 	{
@@ -33,7 +32,7 @@ public class Main
 			
 			if(Display.isCloseRequested())
 			{
-				e.getTex().release();
+				ent.getTex().release();
 				p.getTex().release();
 				
 				Display.destroy();
@@ -44,6 +43,13 @@ public class Main
 	
 	public void init()
 	{
+		//Loads entities
+		eLoader.load();
+		
+		for(int i = 0; i < eLoader.getEnemyLst().size(); i++)
+		{
+			ent = eLoader.getEntity(i);
+		}
 		try {
 			Display.setDisplayMode(new DisplayMode(WIDTH,HEIGHT));
 			Display.setTitle("OneSword Pre-Alpha");
@@ -64,13 +70,14 @@ public class Main
 			glViewport(0,0,WIDTH,HEIGHT);
 		
 		glMatrixMode(GL_PROJECTION);
-		glLoadIdentity();
-		glOrtho(0, WIDTH, HEIGHT, 0, 1, -1);
+		glLoadIdentity(); //Clears projection matrix
+		glOrtho(0, WIDTH, HEIGHT, 0, 1, -1); //sets OpenGL context
 		glMatrixMode(GL_MODELVIEW);
 		
 		try {
+			//Set entity textures//
 			p.setTex("rsc/spr/placeholder.png");
-			e.setTex("rsc/spr/dirt_top.png");
+			ent.setTex("rsc/spr/dirt_top.png");
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -80,20 +87,18 @@ public class Main
 	
 	public void render()
 	{
-		glClear(GL_COLOR_BUFFER_BIT);
+		glClear(GL_COLOR_BUFFER_BIT); //clears the screen
 		
-		pi.pollInput(p);
+		p.pollInput(ent);
+		
+		p.collide(ent);
 		
 		p.render();
 		
-		e.render();
+		ent.render();
 		
-		
-			
-		glBindTexture(GL_TEXTURE_2D, 0);
-		
-		Display.sync(60);
-		Display.update();
+		Display.sync(60); //sets game fps to 60
+		Display.update(); //Updates screen. Duh.
 	}
 	
 	public static void main(String[] args)
