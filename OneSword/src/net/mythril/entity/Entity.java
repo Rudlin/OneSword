@@ -1,11 +1,14 @@
 package net.mythril.entity;
 
 import static org.lwjgl.opengl.GL11.*;
+import static org.lwjgl.input.Keyboard.*;
 import java.io.IOException;
 
 import org.newdawn.slick.opengl.Texture;
 import org.newdawn.slick.opengl.TextureLoader;
 import org.newdawn.slick.util.ResourceLoader;
+
+import net.mythril.player.Camera;
 
 public class Entity 
 {
@@ -93,5 +96,11 @@ public class Entity
 		{
 			setX(e.getX() - e.getWidth());
 		}
+	}
+	
+	public void translate(Camera cam)
+	{
+		setX(getX() + cam.getCamSpd());
+		setY(getY() + cam.getCamSpd());
 	}
 }

@@ -7,13 +7,15 @@ import static org.lwjgl.input.Keyboard.*;
 public class Player extends Entity
 {
 	float jSpd = 10.0f;
+	float walkSpd = 2.0f;
 	boolean isJumping = false;
+	Entity e;
 	public Player(int x, int y, int width, int height) 
 	{
 		super(x, y, width, height);
 	}
 	
-	public void pollInput(Entity e)
+	public void pollInput()
 	{
 		if(!isJumping)
 		{
@@ -27,6 +29,26 @@ public class Player extends Entity
 			}
 		}
 		
+		if(isKeyDown(KEY_A))
+		{
+			setX(getX() - walkSpd);
+		}
+		
+		if(isKeyDown(KEY_D))
+		{
+			setX(getX() + walkSpd);
+		}
+		
+		//for single button presses
+		while(next())
+		{
+			int k = getEventKey();
+		}
+	}
+	
+	public void pCollide(Entity e)
+	{
+		this.e = e;
 		if(isJumping)
 		{
 			if(getY() > e.getY() - getHeight()) {
@@ -38,22 +60,11 @@ public class Player extends Entity
 				jSpd -= 0.1f;
 			}
 		}
+	}
+
+	public void pollCombatInput() 
+	{
 		
-		if(isKeyDown(KEY_A))
-		{
-			setX(getX() - 1);
-		}
-		
-		if(isKeyDown(KEY_D))
-		{
-			setX(getX() + 1);
-		}
-		
-		//for single button presses
-		while(next())
-		{
-			int k = getEventKey();
-		}
 	}
 
 }
