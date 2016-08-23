@@ -9,6 +9,7 @@ import org.newdawn.slick.opengl.TextureLoader;
 import org.newdawn.slick.util.ResourceLoader;
 
 import net.mythril.player.Camera;
+import net.mythril.player.Player;
 
 public class Entity 
 {
@@ -98,9 +99,25 @@ public class Entity
 		}
 	}
 	
-	public void translate(Camera cam)
+	public void translate(Camera cam, Player p)
 	{
-		setX(getX() + cam.getCamSpd());
-		setY(getY() + cam.getCamSpd());
+		if(isKeyDown(KEY_A) && p.getX() < -cam.getOffsetX() + 192)
+		{
+			setX(getX() + cam.getCamSpd());
+		}
+		
+		if(isKeyDown(KEY_D) && p.getX() > -cam.getOffsetX() + 544)
+		{
+			setX(getX() - cam.getCamSpd());
+		}
+		
+		if(p.isJumping()) {
+			setY(getY() + p.getjSpd());
+		} else {
+			setY(getY() - p.getjSpd());
+		}
+		
+		
+		//setY(getY() + cam.getCamSpd());
 	}
 }

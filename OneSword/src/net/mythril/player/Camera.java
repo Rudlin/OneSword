@@ -5,14 +5,21 @@ public class Camera
 	int offsetX, offsetY, camSpd = 2;
 	public void followPlayer(Player p)
 	{
-		if(isKeyDown(KEY_A) && p.getX() < -offsetX + 192)
+		if(isKeyDown(KEY_A) && p.getX() < 192)
 		{
-			offsetX += camSpd;
+			//offsetX += camSpd;
+			p.setX(190);
 		}
 		
-		if(isKeyDown(KEY_D) && p.getX() > -offsetX + 544)
+		if(isKeyDown(KEY_D) && p.getX() > 544)
 		{
-			offsetX -= camSpd;
+			//offsetX -= camSpd;
+			p.setX(546);
+		}
+		
+		if(p.getY() > 400)
+		{
+			p.setY(402);
 		}
 	}
 	public int getCamSpd() {

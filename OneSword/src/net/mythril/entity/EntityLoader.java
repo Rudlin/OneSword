@@ -12,7 +12,7 @@ public class EntityLoader
 	public void load()
 	{
 		platLst.add(new Platform(300,300,64,64));
-		platLst.add(new Platform(400,300,64,64));
+		platLst.add(new Platform(364,300,64,64));
 	}
 	
 	public Entity getEntity(int i)

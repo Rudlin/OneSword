@@ -20,7 +20,7 @@ public class Main
 	final static int WIDTH = 800;
 	final static int HEIGHT = 600;
 	
-	Player p = new Player(100,236,64,64);
+	Player p = new Player(320,36,64,64);
 	EntityLoader eLoader = new EntityLoader();
 	
 	boolean isSelecting = true;
@@ -98,8 +98,6 @@ public class Main
 	
 	public void render()
 	{
-		glViewport(cam.getOffsetX(),cam.getOffsetY(),WIDTH,HEIGHT);
-		
 		glClear(GL_COLOR_BUFFER_BIT); //clears the screen
 		
 		if(isSelecting) {
@@ -125,7 +123,7 @@ public class Main
 		
 		for(int i = 0; i < eLoader.getPlatLst().size(); i++)
 		{
-			eLoader.getEntity(i).translate(cam);
+			eLoader.getEntity(i).translate(cam, p);
 			eLoader.getEntity(i).render();
 		}
 		
@@ -136,7 +134,11 @@ public class Main
 			gui.render();
 		}
 		
-		Display.sync(60); //sets game fps to 60
+		if(!isKeyDown(KEY_P)) {
+			Display.sync(60); //sets game fps to 60
+		} else {
+			Display.sync(15);
+		}
 		Display.update(); //Updates screen. Duh.
 	}
 	
