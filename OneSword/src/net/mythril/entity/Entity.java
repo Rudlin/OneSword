@@ -10,6 +10,7 @@ import org.newdawn.slick.util.ResourceLoader;
 
 import net.mythril.player.Camera;
 import net.mythril.player.Player;
+import net.mythril.resources.RLoader;
 
 public class Entity 
 {
@@ -18,6 +19,8 @@ public class Entity
 	protected Texture genericTex;
 	
 	boolean displayGenTex = true;
+	
+	RLoader resourceloader = new RLoader();
 	
 	public float getX() {
 		return x;
@@ -56,16 +59,24 @@ public class Entity
 		this.x = x;
 		this.y = y;
 		this.width = width;
-		this.height = height;
+	 	this.height = height;
 	}
 
 	public Texture getTex() {
+		try {
+			if(genericTex == null) 
+			{
+				genericTex = resourceloader.loadTexFrom("rsc/spr/default_texture.png");
+			}
+		} catch(IOException e) {
+			e.printStackTrace();
+		}
 		return genericTex;
 	}
 
 	public void setTex(String dir) throws IOException {
-		genericTex = TextureLoader.getTexture("PNG", ResourceLoader.getResourceAsStream(dir));
-		displayGenTex = false;
+		genericTex = resourceloader.loadTexFrom(dir);
+		//displayGenTex = false;
 	}
 	
 	public void render()

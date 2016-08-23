@@ -5,6 +5,6 @@ public class Stage1
 	StageTemplate template = new StageTemplate();
 	public void load()
 	{
-		template.load();
+		//template.load();
 	}
 }
