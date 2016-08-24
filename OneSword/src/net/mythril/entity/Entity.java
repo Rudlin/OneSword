@@ -5,8 +5,6 @@ import static org.lwjgl.input.Keyboard.*;
 import java.io.IOException;
 
 import org.newdawn.slick.opengl.Texture;
-import org.newdawn.slick.opengl.TextureLoader;
-import org.newdawn.slick.util.ResourceLoader;
 
 import net.mythril.player.Camera;
 import net.mythril.player.Player;
@@ -17,8 +15,6 @@ public class Entity
 	float x,y,width,height;
 	
 	protected Texture genericTex;
-	
-	boolean displayGenTex = true;
 	
 	RLoader resourceloader = new RLoader();
 	
@@ -66,7 +62,7 @@ public class Entity
 		try {
 			if(genericTex == null) 
 			{
-				genericTex = resourceloader.loadTexFrom("rsc/spr/default_texture.png");
+				genericTex = resourceloader.loadTexFrom(null);
 			}
 		} catch(IOException e) {
 			e.printStackTrace();
@@ -76,7 +72,6 @@ public class Entity
 
 	public void setTex(String dir) throws IOException {
 		genericTex = resourceloader.loadTexFrom(dir);
-		//displayGenTex = false;
 	}
 	
 	public void render()
@@ -127,8 +122,5 @@ public class Entity
 		} else {
 			setY(getY() - p.getjSpd());
 		}
-		
-		
-		//setY(getY() + cam.getCamSpd());
 	}
 }

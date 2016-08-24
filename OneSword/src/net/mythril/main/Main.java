@@ -14,6 +14,7 @@ import net.mythril.entity.EntityLoader;
 import net.mythril.player.Camera;
 import net.mythril.player.Player;
 import net.mythril.stage.GUI;
+import net.mythril.stage.Stage;
 
 public class Main 
 {
@@ -23,11 +24,14 @@ public class Main
 	Player p = new Player(320,36,64,64);
 	EntityLoader eLoader = new EntityLoader();
 	
-	boolean isSelecting = true;
+	//determines what part of the game is being played
+	boolean isSelecting = false;
 	
 	Camera cam = new Camera();
 	
 	GUI gui = new GUI();
+	
+	Stage stage = new Stage();
 	
 	public void start()
 	{
@@ -85,6 +89,7 @@ public class Main
 		try {
 			//Set entity textures//
 			p.setTex("rsc/spr/placeholder.png");
+			
 			for(int i = 0; i < eLoader.getPlatLst().size(); i++)
 			{
 				eLoader.getEntity(i).setTex("rsc/spr/dirt_top.png");
@@ -92,6 +97,8 @@ public class Main
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		
+		stage.loadAll();
 		
 		System.out.println("OpenGL version: " + glGetString(GL_VERSION));
 	}
@@ -102,32 +109,34 @@ public class Main
 		
 		if(isSelecting) {
 			p.pollInput();
+			
+			for(int i = 0; i < eLoader.getPlatLst().size(); i++)
+			{
+				p.pCollide(eLoader.getEntity(i));
+			}
+			
+			
+			for(int i = 0; i < eLoader.getPlatLst().size(); i++)
+			{
+				p.collide(eLoader.getEntity(i));
+			}
+			
+			cam.followPlayer(p);
+			
+			p.render();
+			
+			for(int i = 0; i < eLoader.getPlatLst().size(); i++)
+			{
+				eLoader.getEntity(i).translate(cam, p);
+				eLoader.getEntity(i).render();
+			}
+			
+			gui.translate(cam);
 		} else {
 			p.pollCombatInput();
+			
+			stage.renderAll();
 		}
-		
-		for(int i = 0; i < eLoader.getPlatLst().size(); i++)
-		{
-			p.pCollide(eLoader.getEntity(i));
-		}
-		
-		
-		for(int i = 0; i < eLoader.getPlatLst().size(); i++)
-		{
-			p.collide(eLoader.getEntity(i));
-		}
-		
-		cam.followPlayer(p);
-		
-		p.render();
-		
-		for(int i = 0; i < eLoader.getPlatLst().size(); i++)
-		{
-			eLoader.getEntity(i).translate(cam, p);
-			eLoader.getEntity(i).render();
-		}
-		
-		gui.translate(cam);
 		
 		if(isKeyDown(KEY_SPACE))
 		{

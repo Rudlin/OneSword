@@ -2,7 +2,7 @@ package net.mythril.stage;
 
 public class Stage1 
 {
-	StageTemplate template = new StageTemplate();
+	Stage template = new Stage();
 	public void load()
 	{
 		//template.load();
