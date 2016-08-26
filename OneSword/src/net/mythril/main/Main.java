@@ -13,13 +13,14 @@ import org.lwjgl.opengl.DisplayMode;
 import net.mythril.entity.EntityLoader;
 import net.mythril.player.Camera;
 import net.mythril.player.Player;
+import net.mythril.resources.Config;
 import net.mythril.stage.GUI;
 import net.mythril.stage.Stage;
 
 public class Main 
 {
-	final static int WIDTH = 800;
-	final static int HEIGHT = 600;
+	Config c = new Config();
+	public int WIDTH, HEIGHT;
 	
 	Player p = new Player(320,36,64,64);
 	EntityLoader eLoader = new EntityLoader();
@@ -48,7 +49,7 @@ public class Main
 					eLoader.getEntity(i).getTex().release();
 				}
 				p.getTex().release();
-				
+				stage.releaseAll();
 				Display.destroy();
 				System.exit(0);
 			}
@@ -57,12 +58,18 @@ public class Main
 	
 	public void init()
 	{
+		c.load();
+		
+		WIDTH = c.getWidth();
+		HEIGHT = c.getHeight();
+		
 		//Loads entities
 		eLoader.load();
 		
 		try {
 			Display.setDisplayMode(new DisplayMode(WIDTH,HEIGHT));
 			Display.setTitle("OneSword Pre-Alpha");
+			Display.setVSyncEnabled(c.isSyncEnabled());
 			
 			Display.create();
 		} catch (LWJGLException e) {
