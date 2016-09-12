@@ -3,6 +3,7 @@ package net.mythril.entity;
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.input.Keyboard.*;
 import java.io.IOException;
+import java.util.ArrayList;
 
 import org.newdawn.slick.opengl.Texture;
 
@@ -17,6 +18,10 @@ public class Entity
 	protected Texture genericTex;
 	
 	RLoader resourceloader = new RLoader();
+	
+	Texture health;
+	
+	ArrayList<Boolean> healthLst = new ArrayList<>();
 	
 	public float getX() {
 		return x;
@@ -122,5 +127,45 @@ public class Entity
 		} else {
 			setY(getY() - p.getjSpd());
 		}
+	}
+	
+	public void loadHealth()
+	{
+		try {
+			health = resourceloader.loadTexFrom("rsc/spr/health.png");
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		for(int i = 0; i < 9; i++)
+		{
+			healthLst.add(true);
+		}
+	}
+	
+	public void renderHealth()
+	{
+		health.bind();
+		
+		glBegin(GL_QUADS);
+			for(int i = 0; i < 9; i++)
+			{
+				if(healthLst.get(i))
+				{
+					glTexCoord2f(0,0);
+					glVertex2f(300 + (16*i),300);
+					glTexCoord2f(1,0);
+					glVertex2f(300 + (16*i) + 16,300);
+					glTexCoord2f(1,1);
+					glVertex2f(300 + (16*i) + 16,332);
+					glTexCoord2f(0,1);
+					glVertex2f(300 + (16*i), 332);
+				}
+			}
+		glEnd();
+	}
+
+	public ArrayList<Boolean> getHealthLst() {
+		return healthLst;
 	}
 }

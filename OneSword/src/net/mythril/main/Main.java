@@ -3,12 +3,14 @@ package net.mythril.main;
 import static org.lwjgl.opengl.GL30.*;
 import static org.lwjgl.opengl.GL11.*;
 
+import java.awt.Font;
 import java.io.IOException;
 
 import org.lwjgl.LWJGLException;
 import static org.lwjgl.input.Keyboard.*;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
+import org.newdawn.slick.TrueTypeFont;
 
 import net.mythril.entity.EntityLoader;
 import net.mythril.player.Camera;
@@ -16,6 +18,7 @@ import net.mythril.player.Player;
 import net.mythril.resources.Config;
 import net.mythril.stage.GUI;
 import net.mythril.stage.Stage;
+import net.mythril.stage.StageSelector;
 
 public class Main 
 {
@@ -26,13 +29,15 @@ public class Main
 	EntityLoader eLoader = new EntityLoader();
 	
 	//determines what part of the game is being played
-	boolean isSelecting = false;
+	boolean isSelecting = true;
 	
 	Camera cam = new Camera();
 	
 	GUI gui = new GUI();
 	
-	Stage stage = new Stage();
+	StageSelector stageSel = new StageSelector();
+	
+	TrueTypeFont font;
 	
 	public void start()
 	{
@@ -49,7 +54,6 @@ public class Main
 					eLoader.getEntity(i).getTex().release();
 				}
 				p.getTex().release();
-				stage.releaseAll();
 				Display.destroy();
 				System.exit(0);
 			}
@@ -105,7 +109,7 @@ public class Main
 			e.printStackTrace();
 		}
 		
-		stage.loadAll();
+		stageSel.loadStageData();
 		
 		System.out.println("OpenGL version: " + glGetString(GL_VERSION));
 	}
@@ -138,16 +142,31 @@ public class Main
 				eLoader.getEntity(i).render();
 			}
 			
-			gui.translate(cam);
 		} else {
+			gui.setGuiX(32);
+			gui.setGuiY(32);
 			p.pollCombatInput();
 			
-			stage.renderAll();
+			stageSel.select();
 		}
 		
 		if(isKeyDown(KEY_SPACE))
 		{
 			gui.render();
+		}
+		
+		if(isKeyDown(KEY_UP)) {
+			if(isSelecting) {
+				isSelecting = false;
+			} else {
+				isSelecting = true;
+			}
+			
+			try {
+				Thread.sleep(100);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
 		}
 		
 		if(!isKeyDown(KEY_P)) {

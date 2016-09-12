@@ -11,6 +11,7 @@ import java.io.IOException;
 import org.newdawn.slick.opengl.Texture;
 
 import net.mythril.player.Camera;
+import net.mythril.player.Player;
 import net.mythril.resources.RLoader;
 
 public class GUI 
@@ -44,12 +45,6 @@ public class GUI
 			glTexCoord2f(0,1);
 			glVertex2f(guiX, guiY + guiTex.getTextureHeight());
 		glEnd();
-	}
-	
-	public void translate(Camera cam)
-	{
-		setGuiX(getGuiX() + cam.getCamSpd());
-		setGuiY(getGuiY() + cam.getCamSpd());
 	}
 
 	public int getGuiX() {

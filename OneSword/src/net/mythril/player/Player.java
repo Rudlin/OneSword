@@ -8,7 +8,10 @@ public class Player extends Entity
 {
 	float jSpd = 10.0f;
 	float walkSpd = 2.0f;
-	boolean isJumping = false, isFalling = false;
+	boolean isJumping = false;
+	
+	int spd, acc, wgt;
+	
 	public float getjSpd() {
 		return jSpd;
 	}
@@ -27,7 +30,7 @@ public class Player extends Entity
 	{
 		if(!isJumping)
 		{
-			if(isKeyDown(KEY_W)  && !isFalling)
+			if(isKeyDown(KEY_W))
 			{
 				jSpd = 5.0f;
 				if(getY() == e.getY() - getHeight()) 
@@ -67,22 +70,19 @@ public class Player extends Entity
 				isJumping = false;
 			}
 			
-			if(getY() > e.getY() - getHeight() && getY() < e.getHeight() && getX() >= e.getX() - getWidth() && getX() <= e.getWidth()) {
-				jSpd = 0f;
-			}
-		} else if(!isJumping && getY() >= e.getY() - getHeight() && getY() < e.getY()) {
-			System.out.println(jSpd);
-			setY(getY() + jSpd);
-				
-			jSpd += 0.1f;
-		} else if(!isJumping && jSpd >= 0 && getY() == e.getY() - getHeight() && getY() < e.getHeight() && getX() >= e.getX() - getWidth() && getX() <= e.getWidth()) {
-			setY(e.getY() - getHeight());
+		} else if(!isJumping && getY() > 472) {
+			jSpd = 0f;
+			setY(472);
 		}
+	}
+	
+	public void checkStats()
+	{
+		
 	}
 
 	public void pollCombatInput() 
 	{
 		
 	}
-
 }

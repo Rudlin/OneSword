@@ -1,37 +1,56 @@
 package net.mythril.stage;
 
-import static org.lwjgl.opengl.GL11.GL_QUADS;
-import static org.lwjgl.opengl.GL11.glBegin;
-import static org.lwjgl.opengl.GL11.glEnd;
-import static org.lwjgl.opengl.GL11.glTexCoord2f;
-import static org.lwjgl.opengl.GL11.glVertex2f;
+import static org.lwjgl.opengl.GL11.*;
 
+import java.awt.Font;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import org.lwjgl.opengl.GL11;
+import org.newdawn.slick.Color;
+import org.newdawn.slick.TrueTypeFont;
 import org.newdawn.slick.opengl.Texture;
 
 import net.mythril.enemy.Boss;
 import net.mythril.player.Player;
 import net.mythril.resources.RLoader;
 
-public class Stage 
+public abstract class Stage 
 {
 	RLoader resourceloader = new RLoader();
 	ArrayList<Texture> flrLst = new ArrayList<>();
 	Texture flr, walls, bg;
 	Player p = new Player(160, 408, 64, 64);
-	Boss b = new Boss(500, 344, 128, 128);
-	public void loadAll()
+	Boss b = new Boss(500, 344, 128, 128, p);
+	
+	TrueTypeFont font;
+	
+	boolean isDamagingPlayer = true;
+	
+	public Stage()
+	{
+		
+	}
+	
+	public abstract void loadAll();
+	
+	public RLoader getResourceloader() {
+		return resourceloader;
+	}
+
+	public void loadAllDefault()
 	{
 		loadFloor(null);
 		loadWalls(null);
 		loadBackground("rsc/spr/default_texture_background.png");
 		loadPlayer("rsc/spr/placeholder.png");
 		loadBoss("rsc/spr/default_texture_128.png");
+		loadText();
 	}
 	
-	public void renderAll()
+	public abstract void renderAll();
+	
+	public void renderAllDefault()
 	{
 		renderBackground();
 		renderEntities();
@@ -82,6 +101,7 @@ public class Stage
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		p.loadHealth();
 	}
 	
 	public void loadBoss(String dir)
@@ -91,6 +111,14 @@ public class Stage
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+	}
+	
+	public void loadText()
+	{
+		glBegin(GL_QUADS);
+			Font bFont = new Font("Serif", Font.BOLD, 24);
+			font = new TrueTypeFont(bFont, false);
+		glEnd();
 	}
 	
 	public void renderFloor()
@@ -179,7 +207,7 @@ public class Stage
 	public void renderEntities()
 	{
 		p.render();
+		p.renderHealth();
 		b.render();
 	}
-
 }
