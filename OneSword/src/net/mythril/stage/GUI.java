@@ -11,7 +11,6 @@ import java.io.IOException;
 import org.newdawn.slick.opengl.Texture;
 
 import net.mythril.player.Camera;
-import net.mythril.player.Player;
 import net.mythril.resources.RLoader;
 
 public class GUI 

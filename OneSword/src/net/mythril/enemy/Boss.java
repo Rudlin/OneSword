@@ -16,7 +16,12 @@ public class Boss extends Entity
 	
 	public void damagePlayer()
 	{
-		p.getHealthLst().remove(p.getHealthLst().size() - damageDealed);
+		p.getHealthLst().set(damageDealed, false);
+		try {
+			Thread.sleep(200);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
 		damageDealed += 1;
 	}
 }

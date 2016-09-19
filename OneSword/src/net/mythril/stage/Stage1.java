@@ -7,17 +7,14 @@ import static org.lwjgl.opengl.GL11.glTexCoord2f;
 import static org.lwjgl.opengl.GL11.glVertex2f;
 import static org.lwjgl.opengl.GL21.*;
 
+import java.awt.RenderingHints.Key;
 import java.io.IOException;
 
 import org.newdawn.slick.opengl.Texture;
-
+import static org.lwjgl.input.Keyboard.*;
 public class Stage1 extends Stage
 {
 	Texture stairs;
-	public Stage1()
-	{
-		
-	}
 
 	@Override
 	public void loadAll() 
@@ -26,10 +23,11 @@ public class Stage1 extends Stage
 		loadWalls("rsc/spr/pillar_mid.png");
 		loadBackground("rsc/spr/default_texture_background.png");
 		loadPlayer("rsc/spr/placeholder.png");
-		loadBoss("rsc/spr/default_texture_128.png");
+		loadBoss("rsc/spr/soldier.png");
 		loadStairs("rsc/spr/stairs.png");
 		loadText();
 		p.loadHealth();
+		b.loadHealth();
 	}
 	
 	public void loadStairs(String dir)
@@ -75,7 +73,9 @@ public class Stage1 extends Stage
 		renderStairs();
 		renderWalls();
 		
-		if(isDamagingPlayer)
+		p.pollCombatInput(b);
+		
+		if(isKeyDown(KEY_L))//isDamagingPlayer)
 		{
 			if(!p.getHealthLst().isEmpty())
 			{

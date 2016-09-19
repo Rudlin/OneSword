@@ -25,12 +25,7 @@ public abstract class Stage
 	
 	TrueTypeFont font;
 	
-	boolean isDamagingPlayer = true;
-	
-	public Stage()
-	{
-		
-	}
+	boolean isDamagingPlayer = false;
 	
 	public abstract void loadAll();
 	
@@ -209,5 +204,6 @@ public abstract class Stage
 		p.render();
 		p.renderHealth();
 		b.render();
+		b.renderHealth();
 	}
 }

@@ -111,6 +111,8 @@ public class Main
 		
 		stageSel.loadStageData();
 		
+		p.loadStats();
+		
 		System.out.println("OpenGL version: " + glGetString(GL_VERSION));
 	}
 	
@@ -145,7 +147,6 @@ public class Main
 		} else {
 			gui.setGuiX(32);
 			gui.setGuiY(32);
-			p.pollCombatInput();
 			
 			stageSel.select();
 		}
@@ -153,6 +154,7 @@ public class Main
 		if(isKeyDown(KEY_SPACE))
 		{
 			gui.render();
+			p.renderStats();
 		}
 		
 		if(isKeyDown(KEY_UP)) {

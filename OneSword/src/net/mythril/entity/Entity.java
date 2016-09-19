@@ -153,13 +153,13 @@ public class Entity
 				if(healthLst.get(i))
 				{
 					glTexCoord2f(0,0);
-					glVertex2f(300 + (16*i),300);
+					glVertex2f(getX() + (16*i) - 32,getY() - 24);
 					glTexCoord2f(1,0);
-					glVertex2f(300 + (16*i) + 16,300);
+					glVertex2f(getX() + (16*i) - 20,getY() - 24);
 					glTexCoord2f(1,1);
-					glVertex2f(300 + (16*i) + 16,332);
+					glVertex2f(getX() + (16*i) - 20,getY() - 8);
 					glTexCoord2f(0,1);
-					glVertex2f(300 + (16*i), 332);
+					glVertex2f(getX() + (16*i) - 32,getY() - 8);
 				}
 			}
 		glEnd();
